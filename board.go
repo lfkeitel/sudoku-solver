@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 const (
@@ -74,21 +75,25 @@ func readBoardFromFile(filepath string) board {
 }
 
 func (b board) print(indent string) {
+	b.fprint(os.Stdout, indent)
+}
+
+func (b board) fprint(w io.Writer, indent string) {
 	for i := 0; i < gridHeight; i++ {
-		fmt.Print(indent)
+		fmt.Fprint(w, indent)
 
 		for j := 0; j < gridWidth; j++ {
-			fmt.Printf("%d ", b[i][j])
+			fmt.Fprintf(w, "%d ", b[i][j])
 
 			if (j+1)%3 == 0 && j < gridWidth-1 {
-				fmt.Print("| ")
+				fmt.Fprint(w, "| ")
 			}
 		}
-		fmt.Println("")
+		fmt.Fprintln(w, "")
 
 		if (i+1)%3 == 0 && i < gridHeight-1 {
-			fmt.Print(indent)
-			fmt.Println("------+-------+------")
+			fmt.Fprint(w, indent)
+			fmt.Fprintln(w, "------+-------+------")
 		}
 	}
 }
